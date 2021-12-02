@@ -2,7 +2,17 @@ import sys
 from pathlib import Path
 
 import pandas as pd
-from pymongo import MongoClient, ASCENDING, HASHED
+from pymongo import MongoClient, HASHED, TEXT
+
+
+def print_dictionary(value):
+    print('{',
+          f"'Respondent': '{value['Respondent']}', "
+          f"'Country': '{value['Country']}', "
+          f"'Age': '{value['Age']}', "
+          f"'YearsCoding': '{value['YearsCoding']}', "
+          f"'Gender': '{value['Gender']}'",
+          '}')
 
 
 def menu(collection):
@@ -16,15 +26,17 @@ def menu(collection):
     choice = int(input("\nYour option: "))
     if choice == 1:
         record = collection.find_one({"Respondent": input("Type ID value: ")})
-        print(record)
+        print_dictionary(dict(record))
 
     elif choice == 2:
-        records = collection.find({"Country": input("Type Country value: ")})
-        print(records)
+        records = list(collection.find({"Country": input("Type Country value: ")}))
+        for record in records:
+            print_dictionary(record)
 
     elif choice == 3:
-        records = collection.find({"YearsCoding": input("Type YearsCoding value: ")})
-        print(records)
+        records = list(collection.find({"YearsCoding": input("Type YearsCoding value: ")}))
+        for record in records:
+            print_dictionary(record)
 
     elif choice == 4:
         print(f"1. How many brazilians answer the SO Survey? {collection.count_documents({'Country': 'Brazil'})}")
