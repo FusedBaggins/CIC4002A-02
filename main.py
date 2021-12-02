@@ -35,6 +35,25 @@ def menu(collection):
         ]))[0]
         print(f"2. Which country answered the most to the survey? {result['_id']} with {result['count']} answers")
 
+        results = list(collection.aggregate([
+            {'$match': {'$text': {'$search': 'Female'}}},
+            {'$group': {'_id': '$Gender', 'count': {'$sum': 1}}},
+            {'$match': {'count': {'$gt': 1}}}
+        ]))
+
+        results = [result['count'] for result in results]
+        print(f"3. How many women answer this survey? {sum(results)}")
+
+        results = list(collection.aggregate([
+            {'$match': {'$text': {'$search': 'Male'}}},
+            {'$group': {'_id': '$Gender', 'count': {'$sum': 1}}},
+            {'$match': {'count': {'$gt': 1}}}
+        ]))
+
+        results = [result['count'] for result in results]
+        print(f"4. How many mans answer this survey? {sum(results)}")
+
+
     elif choice == 5:
         sys.exit(0)
 
