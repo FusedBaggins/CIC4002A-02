@@ -107,11 +107,9 @@ class DatabaseHandler:
         self.__init_database__()
 
     def __create_indexes__(self):
-        self.collection.create_index([
-            ('Country', ASCENDING),
-            ('YearsCoding', HASHED),
-            ('Gender', TEXT)
-        ])
+        self.collection.create_index("Country")
+        self.collection.create_index([("Gender", TEXT)])
+        self.collection.create_index([("YearsCoding", HASHED)])
 
     def __init_database__(self):
         self.database = MongoClient('mongodb://localhost:27017')['StackOverflow']
